@@ -1,15 +1,154 @@
 <template>
   <div
-    class="flex flex-col items-center gap-8 p-8 md:p-12 bg-gradient-to-br from-slate-900/90 via-purple-900/90 to-slate-900/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-purple-500/30 max-w-5xl mx-auto">
+    class="flex flex-col items-center gap-4 sm:gap-6 md:gap-8 p-4 sm:p-6 md:p-8 lg:p-12 bg-gradient-to-br from-slate-900/90 via-purple-900/90 to-slate-900/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-2xl border border-purple-500/30 max-w-5xl mx-auto w-full">
     <!-- File Upload Section -->
     <div class="w-full space-y-4">
-      <div class="text-center mb-4">
-        <h2 class="text-xl font-bold text-purple-200 font-sans mb-1">
+      <div class="text-center mb-3 sm:mb-4">
+        <h2 class="text-lg sm:text-xl font-bold text-purple-200 font-sans mb-1">
           Audio Source
         </h2>
-        <p class="text-sm text-purple-300/70 font-sans">
-          Use default track or upload your own
+        <p class="text-xs sm:text-sm text-purple-300/70 font-sans px-2">
+          Choose a track or upload your own
         </p>
+      </div>
+
+      <!-- Pre-loaded Audio Files Selection -->
+      <div class="w-full space-y-2 sm:space-y-3">
+        <p
+          class="text-xs sm:text-sm font-medium text-purple-300/80 font-sans text-center px-2">
+          Select a track:
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <!-- Track 1 -->
+          <button
+            @click="loadPreloadedAudio('Asake-Badman-Gangsta-ft.Tiakola.mp3')"
+            :disabled="isLoading"
+            :class="[
+              'relative p-3 sm:p-4 rounded-lg sm:rounded-xl border-2 transition-all duration-300 text-left group',
+              selectedTrack === 'Asake-Badman-Gangsta-ft.Tiakola.mp3'
+                ? 'border-purple-400 bg-purple-900/30 shadow-lg shadow-purple-500/20'
+                : 'border-purple-500/30 bg-gradient-to-br from-purple-900/20 to-indigo-900/20 hover:border-purple-400/50 hover:bg-purple-900/30',
+              isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
+            ]">
+            <div class="flex items-center gap-3">
+              <div
+                :class="[
+                  'p-2 rounded-lg transition-colors',
+                  selectedTrack === 'Asake-Badman-Gangsta-ft.Tiakola.mp3'
+                    ? 'bg-purple-600/30'
+                    : 'bg-purple-600/20 group-hover:bg-purple-600/30',
+                ]">
+                <svg
+                  class="w-6 h-6 text-purple-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p
+                  class="font-semibold text-purple-200 font-sans text-sm truncate">
+                  Badman Gangsta
+                </p>
+                <p class="text-xs text-purple-300/60 font-sans truncate">
+                  Asake ft. Tiakola
+                </p>
+              </div>
+              <div
+                v-if="selectedTrack === 'Asake-Badman-Gangsta-ft.Tiakola.mp3'"
+                class="flex-shrink-0">
+                <svg
+                  class="w-5 h-5 text-purple-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd" />
+                </svg>
+              </div>
+            </div>
+          </button>
+
+          <!-- Track 2 -->
+          <button
+            @click="
+              loadPreloadedAudio(
+                'CIZA_ft_Tems_Omah_Lay_Thukuthela_Jazzworx_Lekaa_Beats_-_Isaka_II_6am.mp3'
+              )
+            "
+            :disabled="isLoading"
+            :class="[
+              'relative p-3 sm:p-4 rounded-lg sm:rounded-xl border-2 transition-all duration-300 text-left group',
+              selectedTrack ===
+              'CIZA_ft_Tems_Omah_Lay_Thukuthela_Jazzworx_Lekaa_Beats_-_Isaka_II_6am.mp3'
+                ? 'border-purple-400 bg-purple-900/30 shadow-lg shadow-purple-500/20'
+                : 'border-purple-500/30 bg-gradient-to-br from-purple-900/20 to-indigo-900/20 hover:border-purple-400/50 hover:bg-purple-900/30',
+              isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
+            ]">
+            <div class="flex items-center gap-3">
+              <div
+                :class="[
+                  'p-2 rounded-lg transition-colors',
+                  selectedTrack ===
+                  'CIZA_ft_Tems_Omah_Lay_Thukuthela_Jazzworx_Lekaa_Beats_-_Isaka_II_6am.mp3'
+                    ? 'bg-purple-600/30'
+                    : 'bg-purple-600/20 group-hover:bg-purple-600/30',
+                ]">
+                <svg
+                  class="w-6 h-6 text-purple-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p
+                  class="font-semibold text-purple-200 font-sans text-sm truncate">
+                  Isaka II 6am
+                </p>
+                <p class="text-xs text-purple-300/60 font-sans truncate">
+                  CIZA ft. Tems, Omah Lay
+                </p>
+              </div>
+              <div
+                v-if="
+                  selectedTrack ===
+                  'CIZA_ft_Tems_Omah_Lay_Thukuthela_Jazzworx_Lekaa_Beats_-_Isaka_II_6am.mp3'
+                "
+                class="flex-shrink-0">
+                <svg
+                  class="w-5 h-5 text-purple-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd" />
+                </svg>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="flex items-center gap-4 my-2">
+        <div
+          class="flex-1 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
+        <span class="text-xs text-purple-300/50 font-sans">OR</span>
+        <div
+          class="flex-1 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
       </div>
 
       <!-- Custom File Upload Area -->
@@ -17,7 +156,7 @@
         @click="triggerFileInput"
         @dragover.prevent
         @drop.prevent="handleDrop"
-        class="relative border-2 border-dashed border-purple-500/50 rounded-2xl p-8 bg-gradient-to-br from-purple-900/20 to-indigo-900/20 hover:border-purple-400/70 hover:bg-purple-900/30 transition-all duration-300 cursor-pointer group">
+        class="relative border-2 border-dashed border-purple-500/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 bg-gradient-to-br from-purple-900/20 to-indigo-900/20 hover:border-purple-400/70 hover:bg-purple-900/30 transition-all duration-300 cursor-pointer group">
         <input
           ref="fileInputRef"
           type="file"
@@ -25,11 +164,11 @@
           @change="loadAudioFromFile"
           class="hidden" />
 
-        <div class="flex flex-col items-center justify-center gap-4">
+        <div class="flex flex-col items-center justify-center gap-3 sm:gap-4">
           <div
-            class="p-4 bg-purple-600/20 rounded-full group-hover:bg-purple-600/30 transition-colors">
+            class="p-3 sm:p-4 bg-purple-600/20 rounded-full group-hover:bg-purple-600/30 transition-colors">
             <svg
-              class="w-10 h-10 text-purple-400"
+              class="w-8 h-8 sm:w-10 sm:h-10 text-purple-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24">
@@ -40,11 +179,12 @@
                 d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
             </svg>
           </div>
-          <div class="text-center">
-            <p class="text-purple-200 font-semibold font-sans mb-1">
+          <div class="text-center w-full px-2">
+            <p
+              class="text-purple-200 font-semibold font-sans mb-1 text-sm sm:text-base break-words">
               {{ currentFileName || "Click to upload or drag & drop" }}
             </p>
-            <p class="text-xs text-purple-300/60 font-sans">
+            <p class="text-xs text-purple-300/60 font-sans px-1">
               {{
                 currentFileName
                   ? "Click to change file"
@@ -81,19 +221,23 @@
       <button
         @click="togglePlay"
         :disabled="!audioBuffer || isLoading"
-        class="relative px-10 py-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 hover:from-purple-500 hover:via-indigo-500 hover:to-purple-500 disabled:from-gray-600 disabled:via-gray-700 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-bold text-lg rounded-2xl shadow-2xl hover:shadow-purple-500/50 transform hover:scale-105 active:scale-95 transition-all duration-300 disabled:transform-none disabled:hover:scale-100 min-w-[160px] font-sans group overflow-hidden">
+        class="relative px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 hover:from-purple-500 hover:via-indigo-500 hover:to-purple-500 disabled:from-gray-600 disabled:via-gray-700 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-bold text-base sm:text-lg rounded-xl sm:rounded-2xl shadow-2xl hover:shadow-purple-500/50 transform hover:scale-105 active:scale-95 transition-all duration-300 disabled:transform-none disabled:hover:scale-100 min-w-[140px] sm:min-w-[160px] w-full sm:w-auto max-w-xs font-sans group overflow-hidden">
         <span
           class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></span>
-        <span class="relative flex items-center justify-center gap-3">
+        <span class="relative flex items-center justify-center gap-2 sm:gap-3">
           <svg
             v-if="!isPlaying"
-            class="w-6 h-6"
+            class="w-5 h-5 sm:w-6 sm:h-6"
             fill="currentColor"
             viewBox="0 0 20 20">
             <path
               d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
           </svg>
-          <svg v-else class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+          <svg
+            v-else
+            class="w-5 h-5 sm:w-6 sm:h-6"
+            fill="currentColor"
+            viewBox="0 0 20 20">
             <path
               d="M5.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75A.75.75 0 007.25 3h-1.5zM12.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75a.75.75 0 00-.75-.75h-1.5z" />
           </svg>
@@ -104,10 +248,10 @@
       <!-- Status Indicator -->
       <div
         v-if="audioBuffer"
-        class="flex items-center gap-2 text-sm font-sans transition-all duration-300">
+        class="flex items-center gap-2 text-xs sm:text-sm font-sans transition-all duration-300">
         <div
           :class="[
-            'w-2 h-2 rounded-full animate-pulse',
+            'w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full animate-pulse',
             isPlaying ? 'bg-purple-400' : 'bg-green-400',
           ]"></div>
         <span
@@ -120,12 +264,12 @@
     </div>
 
     <!-- Equalizer Controls -->
-    <div class="w-full space-y-4">
+    <div class="w-full space-y-3 sm:space-y-4">
       <div class="text-center">
         <h3
-          class="text-lg font-semibold text-purple-200 font-sans flex items-center justify-center gap-2">
+          class="text-base sm:text-lg font-semibold text-purple-200 font-sans flex items-center justify-center gap-1.5 sm:gap-2">
           <svg
-            class="w-5 h-5 text-purple-400"
+            class="w-4 h-4 sm:w-5 sm:h-5 text-purple-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24">
@@ -137,19 +281,21 @@
           </svg>
           Equalizer
         </h3>
-        <p class="text-xs text-purple-300/60 font-sans mt-1">
+        <p class="text-xs text-purple-300/60 font-sans mt-1 px-2">
           Adjust bass, mid, and treble frequencies
         </p>
       </div>
 
       <div
-        class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 p-6 bg-gradient-to-br from-purple-900/20 to-indigo-900/20 rounded-2xl border border-purple-500/30">
+        class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 p-4 sm:p-5 md:p-6 bg-gradient-to-br from-purple-900/20 to-indigo-900/20 rounded-xl sm:rounded-2xl border border-purple-500/30">
         <!-- Bass Control -->
-        <div class="flex flex-col items-center gap-3 w-full md:w-auto">
-          <label class="text-sm font-semibold text-purple-200 font-sans">
+        <div
+          class="flex flex-col items-center gap-2 sm:gap-3 w-full sm:w-auto sm:min-w-[120px]">
+          <label
+            class="text-xs sm:text-sm font-semibold text-purple-200 font-sans">
             Bass
           </label>
-          <div class="relative w-full md:w-32">
+          <div class="relative w-full sm:w-32 max-w-xs sm:max-w-none">
             <input
               type="range"
               min="-20"
@@ -162,7 +308,7 @@
           </div>
           <span
             :class="[
-              'text-sm font-sans font-medium px-3 py-1 rounded-full',
+              'text-xs sm:text-sm font-sans font-medium px-2 sm:px-3 py-1 rounded-full',
               bass === 0
                 ? 'text-purple-300/70 bg-purple-900/20'
                 : bass > 0
@@ -174,11 +320,13 @@
         </div>
 
         <!-- Mid Control -->
-        <div class="flex flex-col items-center gap-3 w-full md:w-auto">
-          <label class="text-sm font-semibold text-purple-200 font-sans">
+        <div
+          class="flex flex-col items-center gap-2 sm:gap-3 w-full sm:w-auto sm:min-w-[120px]">
+          <label
+            class="text-xs sm:text-sm font-semibold text-purple-200 font-sans">
             Mid
           </label>
-          <div class="relative w-full md:w-32">
+          <div class="relative w-full sm:w-32 max-w-xs sm:max-w-none">
             <input
               type="range"
               min="-20"
@@ -191,7 +339,7 @@
           </div>
           <span
             :class="[
-              'text-sm font-sans font-medium px-3 py-1 rounded-full',
+              'text-xs sm:text-sm font-sans font-medium px-2 sm:px-3 py-1 rounded-full',
               mid === 0
                 ? 'text-purple-300/70 bg-purple-900/20'
                 : mid > 0
@@ -203,11 +351,13 @@
         </div>
 
         <!-- Treble Control -->
-        <div class="flex flex-col items-center gap-3 w-full md:w-auto">
-          <label class="text-sm font-semibold text-purple-200 font-sans">
+        <div
+          class="flex flex-col items-center gap-2 sm:gap-3 w-full sm:w-auto sm:min-w-[120px]">
+          <label
+            class="text-xs sm:text-sm font-semibold text-purple-200 font-sans">
             Treble
           </label>
-          <div class="relative w-full md:w-32">
+          <div class="relative w-full sm:w-32 max-w-xs sm:max-w-none">
             <input
               type="range"
               min="-20"
@@ -220,7 +370,7 @@
           </div>
           <span
             :class="[
-              'text-sm font-sans font-medium px-3 py-1 rounded-full',
+              'text-xs sm:text-sm font-sans font-medium px-2 sm:px-3 py-1 rounded-full',
               treble === 0
                 ? 'text-purple-300/70 bg-purple-900/20'
                 : treble > 0
@@ -234,12 +384,12 @@
     </div>
 
     <!-- Visualizer Canvas -->
-    <div class="w-full space-y-3">
-      <div class="flex items-center justify-between">
+    <div class="w-full space-y-2 sm:space-y-3">
+      <div class="flex items-center justify-between gap-2">
         <h3
-          class="text-lg font-semibold text-purple-200 font-sans flex items-center gap-2">
+          class="text-base sm:text-lg font-semibold text-purple-200 font-sans flex items-center gap-1.5 sm:gap-2">
           <svg
-            class="w-5 h-5 text-purple-400"
+            class="w-4 h-4 sm:w-5 sm:h-5 text-purple-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24">
@@ -249,20 +399,22 @@
               stroke-width="2"
               d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
           </svg>
-          Frequency Spectrum
+          <span class="hidden xs:inline">Frequency Spectrum</span>
+          <span class="xs:hidden">Spectrum</span>
         </h3>
         <div
           v-if="isPlaying"
-          class="flex items-center gap-2 px-3 py-1.5 bg-purple-500/20 rounded-full border border-purple-400/30">
-          <div class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></div>
-          <span class="font-sans text-sm font-medium text-purple-300"
+          class="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-purple-500/20 rounded-full border border-purple-400/30 flex-shrink-0">
+          <div
+            class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-purple-400 animate-pulse"></div>
+          <span class="font-sans text-xs sm:text-sm font-medium text-purple-300"
             >Live</span
           >
         </div>
       </div>
       <div
         :class="[
-          'w-full bg-gradient-to-b from-black/60 via-purple-950/40 to-black/60 rounded-2xl p-6 border shadow-2xl backdrop-blur-sm transition-all duration-300',
+          'w-full bg-gradient-to-b from-black/60 via-purple-950/40 to-black/60 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 border shadow-2xl backdrop-blur-sm transition-all duration-300',
           isPlaying
             ? 'border-purple-400/50 shadow-purple-500/20'
             : 'border-purple-500/30',
@@ -271,12 +423,12 @@
           ref="canvasRef"
           width="800"
           height="300"
-          class="w-full h-auto rounded-xl"></canvas>
+          class="w-full h-auto rounded-lg sm:rounded-xl"></canvas>
         <div
           v-if="!isPlaying && audioBuffer"
-          class="text-center mt-4 text-purple-300/50 text-sm font-sans flex items-center justify-center gap-2">
+          class="text-center mt-3 sm:mt-4 text-purple-300/50 text-xs sm:text-sm font-sans flex items-center justify-center gap-2 px-2">
           <svg
-            class="w-4 h-4"
+            class="w-3 h-3 sm:w-4 sm:h-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24">
@@ -299,7 +451,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted, nextTick } from "vue";
 
 let audioContext;
 let sourceNode;
@@ -315,12 +467,45 @@ const isPlaying = ref(false);
 const canvasRef = ref(null);
 const fileInputRef = ref(null);
 const isLoading = ref(false);
-const currentFileName = ref("Default Audio Track");
+const currentFileName = ref(null);
+const selectedTrack = ref(null);
 
 // EQ values
 const bass = ref(0);
 const mid = ref(0);
 const treble = ref(0);
+
+// Canvas responsive handling
+const resizeCanvas = () => {
+  if (!canvasRef.value) return;
+  const canvas = canvasRef.value;
+  const container = canvas.parentElement;
+  if (!container) return;
+
+  const containerWidth = container.clientWidth;
+  const padding =
+    window.innerWidth < 640 ? 24 : window.innerWidth < 768 ? 32 : 48;
+  const maxWidth = Math.min(800, containerWidth - padding);
+  const aspectRatio = 800 / 300;
+  canvas.style.width = `${maxWidth}px`;
+  canvas.style.height = `${maxWidth / aspectRatio}px`;
+};
+
+const handleResize = () => {
+  resizeCanvas();
+};
+
+// Setup resize listener and initial canvas sizing
+onMounted(() => {
+  nextTick(() => {
+    resizeCanvas();
+    window.addEventListener("resize", handleResize);
+  });
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", handleResize);
+});
 
 const triggerFileInput = () => {
   fileInputRef.value?.click();
@@ -339,6 +524,7 @@ const loadAudioFromFile = async (event) => {
 
   isLoading.value = true;
   currentFileName.value = file.name;
+  selectedTrack.value = null; // Clear selected track when uploading
 
   try {
     const arrayBuffer = await file.arrayBuffer();
@@ -378,24 +564,36 @@ const loadAudioFromBuffer = async (arrayBuffer) => {
   updateEQ();
 };
 
-const loadDefaultAudio = async () => {
+const loadPreloadedAudio = async (filename) => {
   isLoading.value = true;
+  selectedTrack.value = filename;
+  currentFileName.value = null; // Clear uploaded file name
+
   try {
-    const response = await fetch("/default-audio.mp3");
+    const response = await fetch(`/${filename}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${filename}`);
+    }
     const arrayBuffer = await response.arrayBuffer();
     await loadAudioFromBuffer(arrayBuffer);
-    currentFileName.value = "Default Audio Track";
+
+    // Set display name based on filename
+    if (filename === "Asake-Badman-Gangsta-ft.Tiakola.mp3") {
+      currentFileName.value = "Badman Gangsta - Asake ft. Tiakola";
+    } else if (
+      filename ===
+      "CIZA_ft_Tems_Omah_Lay_Thukuthela_Jazzworx_Lekaa_Beats_-_Isaka_II_6am.mp3"
+    ) {
+      currentFileName.value = "Isaka II 6am - CIZA ft. Tems, Omah Lay";
+    }
   } catch (error) {
-    console.error("Failed to load default audio:", error);
-    currentFileName.value = "Error loading default audio";
+    console.error(`Failed to load audio: ${filename}`, error);
+    currentFileName.value = "Error loading audio";
+    selectedTrack.value = null;
   } finally {
     isLoading.value = false;
   }
 };
-
-onMounted(() => {
-  loadDefaultAudio();
-});
 
 const updateEQ = () => {
   if (!audioContext || !bassFilter || !midFilter || !trebleFilter) return;
