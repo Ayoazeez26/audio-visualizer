@@ -140,6 +140,76 @@ npm run preview
 
 Previews the production build locally.
 
+## 🧪 Testing
+
+The project includes a comprehensive test suite covering all major functionality.
+
+### Test Types
+
+1. **Unit Tests** (84 tests)
+
+   - Audio file utilities and validation
+   - Canvas rendering and calculations
+   - Equalizer logic and filter configuration
+   - Web Audio API setup and routing
+   - Visualizer rendering and animations
+   - Error handling scenarios
+
+2. **Component Tests**
+
+   - Vue component rendering
+   - User interactions
+   - State management
+   - Responsive behavior
+
+3. **E2E Tests** (Playwright)
+   - Complete user workflows
+   - Cross-browser testing
+   - Mobile responsiveness
+   - File upload and playback
+
+### Running Tests
+
+```bash
+# Run all unit and component tests (watch mode)
+npm run test
+
+# Run tests once (CI mode)
+npm run test:run
+
+# Run tests with interactive UI
+npm run test:ui
+
+# Run tests with coverage report
+npm run test:coverage
+
+# Run E2E tests (requires dev server)
+npm run test:e2e
+
+# Run E2E tests with UI
+npm run test:e2e:ui
+
+# Run E2E tests in headed mode (see browser)
+npm run test:e2e:headed
+
+# Run all tests (unit + E2E)
+npm run test:all
+```
+
+### Test Coverage
+
+The test suite provides comprehensive coverage of:
+
+- ✅ Audio loading and decoding
+- ✅ Equalizer functionality
+- ✅ Canvas visualization
+- ✅ Web Audio API integration
+- ✅ Component rendering and interactions
+- ✅ Error handling
+- ✅ Responsive design
+
+See [TESTING.md](./TESTING.md) and [TEST_PLAN.md](./TEST_PLAN.md) for detailed testing documentation.
+
 ## 📁 Project Structure
 
 ```
