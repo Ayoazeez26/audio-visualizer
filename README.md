@@ -340,9 +340,18 @@ Configuration in `vite.config.ts`:
 
 ### Audio not playing
 
-- Ensure your browser allows autoplay (user interaction may be required)
-- Check browser console for errors
-- Verify audio file format is supported (MP3, WAV, OGG)
+- **Mobile devices (iOS Safari, Chrome Mobile)**:
+  - Audio requires user interaction to start (tap play button)
+  - AudioContext must be resumed in response to user gesture
+  - If audio doesn't play, try tapping the play button again
+  - Ensure device is not in silent mode
+- **Desktop browsers**:
+  - Ensure your browser allows autoplay (user interaction may be required)
+  - Check browser console for errors
+- **General**:
+  - Verify audio file format is supported (MP3, WAV, OGG)
+  - Check that Web Audio API is supported in your browser
+  - For deployed sites, ensure audio files are properly served (check network tab)
 
 ### Visualizer not showing
 

@@ -539,7 +539,18 @@ const loadAudioFromFile = async (event) => {
 
 const loadAudioFromBuffer = async (arrayBuffer) => {
   if (!audioContext) {
-    audioContext = new AudioContext();
+    // Create AudioContext - on mobile it will start in 'suspended' state
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // Handle AudioContext state changes (important for mobile)
+    audioContext.addEventListener('statechange', () => {
+      console.log('AudioContext state changed to:', audioContext.state);
+      // If context gets interrupted during playback, update playing state
+      if (audioContext.state === 'suspended' && isPlaying.value) {
+        isPlaying.value = false;
+      }
+    });
+    
     analyser = audioContext.createAnalyser();
     analyser.fftSize = 256;
 
@@ -570,6 +581,7 @@ const loadPreloadedAudio = async (filename) => {
   currentFileName.value = null; // Clear uploaded file name
 
   try {
+    // Use correct path for production - Vite serves public folder at root
     const response = await fetch(`/${filename}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch ${filename}`);
@@ -608,8 +620,21 @@ const togglePlay = async () => {
     audioContext.suspend();
     isPlaying.value = false;
   } else {
-    if (audioContext.state === "suspended") {
-      await audioContext.resume();
+    // On mobile devices, AudioContext must be resumed in response to user gesture
+    // This is critical for iOS Safari and other mobile browsers
+    try {
+      if (audioContext.state === "suspended" || audioContext.state === "interrupted") {
+        await audioContext.resume();
+      }
+      // Ensure context is running before playing
+      if (audioContext.state !== "running") {
+        await audioContext.resume();
+      }
+    } catch (error) {
+      console.error("Failed to resume AudioContext:", error);
+      // Show user-friendly error message
+      alert("Please tap the play button again to start audio playback.");
+      return;
     }
     playAudio();
   }
@@ -618,31 +643,49 @@ const togglePlay = async () => {
 const playAudio = () => {
   if (!audioBuffer.value) return;
 
+  // Ensure AudioContext is running before attempting to play
+  if (audioContext.state !== "running") {
+    console.warn("AudioContext is not running, state:", audioContext.state);
+    return;
+  }
+
   // Stop previous source if exists
   if (sourceNode) {
     try {
       sourceNode.stop();
+      sourceNode.disconnect();
     } catch (e) {
-      // Source already stopped
+      // Source already stopped or disconnected
     }
   }
 
-  sourceNode = audioContext.createBufferSource();
-  sourceNode.buffer = audioBuffer.value;
+  try {
+    sourceNode = audioContext.createBufferSource();
+    sourceNode.buffer = audioBuffer.value;
 
-  // Audio routing: source → bass → mid → treble → analyser → speakers
-  sourceNode
-    .connect(bassFilter)
-    .connect(midFilter)
-    .connect(trebleFilter)
-    .connect(analyser)
-    .connect(audioContext.destination);
+    // Handle audio end event
+    sourceNode.onended = () => {
+      isPlaying.value = false;
+    };
 
-  sourceNode.start(0);
-  isPlaying.value = true;
+    // Audio routing: source → bass → mid → treble → analyser → speakers
+    sourceNode
+      .connect(bassFilter)
+      .connect(midFilter)
+      .connect(trebleFilter)
+      .connect(analyser)
+      .connect(audioContext.destination);
 
-  updateEQ();
-  drawVisualizer();
+    sourceNode.start(0);
+    isPlaying.value = true;
+
+    updateEQ();
+    drawVisualizer();
+  } catch (error) {
+    console.error("Error playing audio:", error);
+    isPlaying.value = false;
+    alert("Failed to play audio. Please try again.");
+  }
 };
 
 const drawVisualizer = () => {
